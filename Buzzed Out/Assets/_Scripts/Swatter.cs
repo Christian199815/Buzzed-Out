@@ -4,40 +4,71 @@ using UnityEngine;
 
 public class Swatter : MonoBehaviour
 {
-    [SerializeField] private KeyCode forward;
-    [SerializeField] private KeyCode backward;
-    [SerializeField] private KeyCode left;
-    [SerializeField] private KeyCode right;
+    [SerializeField] private GameObject hitter;
 
-    [SerializeField] private int Speed;
-    void Start()
+    private bool slamming = false;
+
+
+
+    private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (!slamming)
+            {
+                StartCoroutine(Slam());
+            }
+        }
     }
 
-    void Update()
+    /// <summary>
+    /// Slams down the swatter, in an attemot to hit the ants (players)
+    /// </summary>
+    private IEnumerator Slam()
     {
-        SwatterMovement();
+        slamming = true;
+        yield return StartCoroutine(RotateDown());
+
+        checkForCollision();
     }
 
-
-    void SwatterMovement()
+    private void checkForCollision()
     {
-        if (Input.GetKey(forward))
+        Collider[] colls = Physics.OverlapBox // transforms of the hitter gameobject
+        #region Get colliders hit by the hitter gameobject
+            (
+            hitter.transform.position,
+            new Vector3(hitter.transform.position.x / 2,
+            hitter.transform.position.y / 2,
+            hitter.transform.position.z / 2));
+        #endregion
+
+        List<Ant> hitAnts = new List<Ant>();
+
+        // if the hit collider is an ant (player) add it to "hitAnts"
+        for (int i = 0; i < colls.Length; i++)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + (Speed * Time.deltaTime));
+            Ant ant = colls[i].gameObject.GetComponent<Ant>();
+            if (ant != null)
+            {
+                hitAnts.Add(ant);
+            }
         }
-        if (Input.GetKey(backward))
+        // call the Hit() method on all the hit ants
+        foreach (Ant a in hitAnts)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + -(Speed * Time.deltaTime));
+            a.Hit();
         }
-        if (Input.GetKey(left))
+    }
+
+    private IEnumerator RotateDown()
+    {
+        int rotatedDegrees = 0;
+        while(rotatedDegrees < 30)
         {
-            transform.position = new Vector3(transform.position.x + -(Speed * Time.deltaTime),transform.position.y , transform.position.z);
-        }
-        if (Input.GetKey(right))
-        {
-            transform.position = new Vector3(transform.position.x + (Speed * Time.deltaTime), transform.position.y, transform.position.z);
+            transform.rotation = Quaternion.Euler(transform.eulerAngles.x + 3, transform.eulerAngles.y, transform.eulerAngles.z);
+            rotatedDegrees += 1;
+            yield return new WaitForSeconds(0.025f);
         }
     }
 }
