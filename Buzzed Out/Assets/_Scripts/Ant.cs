@@ -8,9 +8,13 @@ public class Ant : MonoBehaviour
     [SerializeField] private int m_playerNumber;
     [SerializeField] private int m_moveSpeed;
 
+    private Rigidbody rb;
+
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         StartCoroutine(GetUserInput());
+        StartCoroutine(RestrictRigidBodyY(1));
     }
 
     private IEnumerator GetUserInput()
@@ -24,8 +28,20 @@ public class Ant : MonoBehaviour
         }
     }
 
+    private IEnumerator RestrictRigidBodyY(float _timeUntilREstriction)
+    {
+        yield return new WaitForSeconds(_timeUntilREstriction);
+        rb.constraints = RigidbodyConstraints.FreezePositionY;
+    }
+
     public void Hit()
     {
         print(name + ": was hit");
+        Death();
+    }
+
+    private void Death()
+    {
+        print(name + ": died");
     }
 }

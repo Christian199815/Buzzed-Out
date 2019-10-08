@@ -8,25 +8,58 @@ public enum SwatterState
     Upright = 0,
     Floored,
     Slamming,
-    GoingUp,
+    Retracting,
     ReCharging
 }
 
 public class Swatter : MonoBehaviour
 {
+    [Header("Swatter Settings")]
     [SerializeField] private GameObject m_hitter;
     [SerializeField] private float m_rechargeTime;
+    [SerializeField] private float m_moveSpeed;
+    [SerializeField] private int m_SlamdegreesPerSecond;
+    [SerializeField] private int m_RetractdegreesPerSecond;
+
+    [Header("Player Settings")]
+    [SerializeField] private int m_playerNumber;
 
     private SwatterState m_swatterState;
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(m_SlamdegreesPerSecond <= 0)
         {
-            if (m_swatterState == SwatterState.Upright)
+            Debug.LogError("Swatter: \"m_SlamdegreesPerSecond\" <= 0, please make this more then 0 in the inspector");
+            return;
+        }
+        if(m_RetractdegreesPerSecond <= 0)
+        {
+            Debug.LogError("Swatter: \"m_RetractdegreesPerSecond\" <= 0, please make this more then 0 in the inspector");
+            return;
+        }
+
+        StartCoroutine(GetUserInput());
+    }
+
+    private IEnumerator GetUserInput()
+    {
+        while (true) // "game !paused" ?,   add a check if any button is being pressed.
+        {
+            if (Input.GetAxis("SwatterSlam") != 0)
             {
-                StartCoroutine(Slam());
+                if (m_swatterState == SwatterState.Upright)
+                {
+                    StartCoroutine(Slam());
+                }
             }
+            if (m_swatterState == SwatterState.Upright || m_swatterState == SwatterState.ReCharging)
+            {
+                Vector3 xboxInput = new Vector3(Input.GetAxis("Horizontalxbox" + m_playerNumber.ToString()), 0, Input.GetAxis("Verticalxbox" + m_playerNumber.ToString()));
+                transform.position += xboxInput * Time.deltaTime * m_moveSpeed;
+            }
+
+            yield return null;
         }
     }
 
@@ -80,9 +113,9 @@ public class Swatter : MonoBehaviour
     private IEnumerator RotateDown()
     {
         int rotatedDegrees = 0;
-        while(rotatedDegrees < 30)
+        while(rotatedDegrees < 90 / m_SlamdegreesPerSecond)
         {
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x + 3, transform.eulerAngles.y, transform.eulerAngles.z);
+            transform.rotation = Quaternion.Euler(transform.eulerAngles.x + m_SlamdegreesPerSecond, transform.eulerAngles.y, transform.eulerAngles.z);
             rotatedDegrees += 1;
             yield return new WaitForSeconds(0.025f);
         }
@@ -90,11 +123,11 @@ public class Swatter : MonoBehaviour
 
     private IEnumerator RotateUp()
     {
-        m_swatterState = SwatterState.GoingUp;
+        m_swatterState = SwatterState.Retracting;
         int rotatedDegrees = 0;
-        while (rotatedDegrees < 30)
+        while (rotatedDegrees < 90 / m_RetractdegreesPerSecond)
         {
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x - 3, transform.eulerAngles.y, transform.eulerAngles.z);
+            transform.rotation = Quaternion.Euler(transform.eulerAngles.x - m_RetractdegreesPerSecond, transform.eulerAngles.y, transform.eulerAngles.z);
             rotatedDegrees += 1;
             yield return new WaitForSeconds(0.025f);
         }
