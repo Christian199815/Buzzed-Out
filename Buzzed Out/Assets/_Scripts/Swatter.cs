@@ -29,17 +29,22 @@ public class Swatter : MonoBehaviour
         yield return StartCoroutine(RotateDown());
 
         checkForCollision();
+
+        yield return new WaitForSeconds(1.5f);
+        StartCoroutine(RotateUp());
     }
 
     private void checkForCollision()
     {
+        //debug
+        print(hitter.transform.position);
         Collider[] colls = Physics.OverlapBox // transforms of the hitter gameobject
         #region Get colliders hit by the hitter gameobject
             (
             hitter.transform.position,
-            new Vector3(hitter.transform.position.x / 2,
-            hitter.transform.position.y / 2,
-            hitter.transform.position.z / 2));
+            new Vector3(hitter.GetComponent<MeshRenderer>().bounds.size.x,
+            hitter.GetComponent<MeshRenderer>().bounds.size.y,
+            hitter.GetComponent<MeshRenderer>().bounds.size.z));
         #endregion
 
         List<Ant> hitAnts = new List<Ant>();
@@ -47,7 +52,7 @@ public class Swatter : MonoBehaviour
         // if the hit collider is an ant (player) add it to "hitAnts"
         for (int i = 0; i < colls.Length; i++)
         {
-            Ant ant = colls[i].gameObject.GetComponent<Ant>();
+            Ant ant = colls[i].gameObject.transform.root.gameObject.GetComponent<Ant>();
             if (ant != null)
             {
                 hitAnts.Add(ant);
@@ -66,6 +71,17 @@ public class Swatter : MonoBehaviour
         while(rotatedDegrees < 30)
         {
             transform.rotation = Quaternion.Euler(transform.eulerAngles.x + 3, transform.eulerAngles.y, transform.eulerAngles.z);
+            rotatedDegrees += 1;
+            yield return new WaitForSeconds(0.025f);
+        }
+    }
+
+    private IEnumerator RotateUp()
+    {
+        int rotatedDegrees = 0;
+        while (rotatedDegrees < 30)
+        {
+            transform.rotation = Quaternion.Euler(transform.eulerAngles.x - 3, transform.eulerAngles.y, transform.eulerAngles.z);
             rotatedDegrees += 1;
             yield return new WaitForSeconds(0.025f);
         }
