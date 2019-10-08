@@ -3,17 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using XboxCtrlrInput;
 
+public enum SwatterState
+{
+    Upright = 0,
+    Floored,
+    Slamming,
+    GoingUp,
+    ReCharging
+}
+
 public class Swatter : MonoBehaviour
 {
-    [SerializeField] private GameObject hitter;
+    [SerializeField] private GameObject m_hitter;
+    [SerializeField] private float m_rechargeTime;
 
-    private bool slamming = false;
+    private SwatterState m_swatterState;
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (!slamming)
+            if (m_swatterState == SwatterState.Upright)
             {
                 StartCoroutine(Slam());
             }
@@ -25,9 +35,10 @@ public class Swatter : MonoBehaviour
     /// </summary>
     private IEnumerator Slam()
     {
-        slamming = true;
+        m_swatterState = SwatterState.Slamming;
         yield return StartCoroutine(RotateDown());
 
+        m_swatterState = SwatterState.Floored;
         checkForCollision();
 
         yield return new WaitForSeconds(1.5f);
@@ -37,14 +48,15 @@ public class Swatter : MonoBehaviour
     private void checkForCollision()
     {
         //debug
-        print(hitter.transform.position);
+        print(m_hitter.transform.position);
         Collider[] colls = Physics.OverlapBox // transforms of the hitter gameobject
         #region Get colliders hit by the hitter gameobject
             (
-            hitter.transform.position,
-            new Vector3(hitter.GetComponent<MeshRenderer>().bounds.size.x,
-            hitter.GetComponent<MeshRenderer>().bounds.size.y,
-            hitter.GetComponent<MeshRenderer>().bounds.size.z));
+            m_hitter.transform.position,
+            new Vector3(m_hitter.GetComponent<MeshRenderer>().bounds.size.x * 0.5f,
+            m_hitter.GetComponent<MeshRenderer>().bounds.size.y * 0.5f,
+            m_hitter.GetComponent<MeshRenderer>().bounds.size.z * 0.5f)
+            );
         #endregion
 
         List<Ant> hitAnts = new List<Ant>();
@@ -78,6 +90,7 @@ public class Swatter : MonoBehaviour
 
     private IEnumerator RotateUp()
     {
+        m_swatterState = SwatterState.GoingUp;
         int rotatedDegrees = 0;
         while (rotatedDegrees < 30)
         {
@@ -85,5 +98,13 @@ public class Swatter : MonoBehaviour
             rotatedDegrees += 1;
             yield return new WaitForSeconds(0.025f);
         }
+        m_swatterState = SwatterState.ReCharging;
+        StartCoroutine(Recharge(m_rechargeTime));
+    }
+
+    private IEnumerator Recharge(float _rechargeTime)
+    {
+        yield return new WaitForSeconds(_rechargeTime);
+        m_swatterState = SwatterState.Upright;
     }
 }
