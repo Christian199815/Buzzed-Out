@@ -22,7 +22,7 @@ public class Ant : MonoBehaviour
         }
     }
 
-public void Hit()
+    public void Hit()
     {
         print(name + ": was hit");
     }
