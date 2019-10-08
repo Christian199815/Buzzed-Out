@@ -1,15 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XboxCtrlrInput;
 
 public class Swatter : MonoBehaviour
 {
     [SerializeField] private GameObject hitter;
 
     private bool slamming = false;
-
-    
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
