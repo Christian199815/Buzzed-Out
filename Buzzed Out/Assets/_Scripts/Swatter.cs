@@ -8,6 +8,7 @@ public class Swatter : MonoBehaviour
     [SerializeField] private GameObject hitter;
 
     private bool slamming = false;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
