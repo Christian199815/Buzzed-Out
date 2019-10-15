@@ -108,6 +108,6 @@ public class Ant : MonoBehaviour
 
     private void Death()
     {
-        print(name + ": died");
+        print(name + ": ded, dead, died");
     }
 }
