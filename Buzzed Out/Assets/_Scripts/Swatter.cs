@@ -16,10 +16,12 @@ public class Swatter : MonoBehaviour
 {
     [Header("Swatter Settings")]
     [SerializeField] private GameObject m_hitter;
+    [SerializeField] private float m_SlamDurationBeforeHit;
+    [SerializeField] private float m_RetractFuration;
+    [Header("Swatter Stats")]
+    [SerializeField] private float m_slamDamage;
     [SerializeField] private float m_rechargeTime;
     [SerializeField] private float m_moveSpeed;
-    [SerializeField] private int m_SlamdegreesPerSecond;
-    [SerializeField] private int m_RetractdegreesPerSecond;
 
     [Header("Player Settings")]
     [SerializeField] private int m_playerNumber;
@@ -28,17 +30,16 @@ public class Swatter : MonoBehaviour
 
     private void Start()
     {
-        if(m_SlamdegreesPerSecond <= 0)
+        if(m_SlamDurationBeforeHit <= 0)
         {
             Debug.LogError("Swatter: \"m_SlamdegreesPerSecond\" <= 0, please make this more then 0 in the inspector");
             return;
         }
-        if(m_RetractdegreesPerSecond <= 0)
+        if(m_RetractFuration <= 0)
         {
             Debug.LogError("Swatter: \"m_RetractdegreesPerSecond\" <= 0, please make this more then 0 in the inspector");
             return;
         }
-
         StartCoroutine(GetUserInput());
     }
 
@@ -58,7 +59,6 @@ public class Swatter : MonoBehaviour
                 Vector3 xboxInput = new Vector3(Input.GetAxis("Horizontalxbox" + m_playerNumber.ToString()), 0, Input.GetAxis("Verticalxbox" + m_playerNumber.ToString()));
                 transform.position += xboxInput * Time.deltaTime * m_moveSpeed;
             }
-
             yield return null;
         }
     }
@@ -70,6 +70,7 @@ public class Swatter : MonoBehaviour
     {
         m_swatterState = SwatterState.Slamming;
         yield return StartCoroutine(RotateDown());
+        Camera.main.GetComponent<CameraShake>().Shake(0.6f, 1, 0.8f);
 
         m_swatterState = SwatterState.Floored;
         checkForCollision();
@@ -106,18 +107,21 @@ public class Swatter : MonoBehaviour
         // call the Hit() method on all the hit ants
         foreach (Ant a in hitAnts)
         {
-            a.Hit();
+            a.Hit(m_slamDamage);
         }
     }
 
     private IEnumerator RotateDown()
     {
         int rotatedDegrees = 0;
-        while(rotatedDegrees < 90 / m_SlamdegreesPerSecond)
+        while (rotatedDegrees < 30)
         {
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x + m_SlamdegreesPerSecond, transform.eulerAngles.y, transform.eulerAngles.z);
-            rotatedDegrees += 1;
-            yield return new WaitForSeconds(0.025f);
+            transform.rotation = Quaternion.Lerp(
+                Quaternion.Euler(0, transform.eulerAngles.y, transform.eulerAngles.z),
+                Quaternion.Euler(90, transform.eulerAngles.y, transform.eulerAngles.z),
+            (float)rotatedDegrees / 30);
+            rotatedDegrees += 3;
+            yield return new WaitForSeconds(m_SlamDurationBeforeHit / (float)30);
         }
     }
 
@@ -125,11 +129,15 @@ public class Swatter : MonoBehaviour
     {
         m_swatterState = SwatterState.Retracting;
         int rotatedDegrees = 0;
-        while (rotatedDegrees < 90 / m_RetractdegreesPerSecond)
+        float originalX = transform.eulerAngles.x;
+        while (transform.eulerAngles.x > 1.5f)
         {
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x - m_RetractdegreesPerSecond, transform.eulerAngles.y, transform.eulerAngles.z);
+            transform.rotation = Quaternion.Lerp(
+                Quaternion.Euler(originalX, transform.eulerAngles.y, transform.eulerAngles.z),
+                Quaternion.Euler(0, transform.eulerAngles.y, transform.eulerAngles.z),
+            (float)rotatedDegrees / 90);
             rotatedDegrees += 1;
-            yield return new WaitForSeconds(0.025f);
+            yield return new WaitForSeconds(m_RetractFuration / (float)90);
         }
         m_swatterState = SwatterState.ReCharging;
         StartCoroutine(Recharge(m_rechargeTime));

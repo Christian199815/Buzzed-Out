@@ -4,57 +4,54 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
-    // Entire script needs editing, this is just an old template! -----------------------------
-    [SerializeField] private GameObject Player;
-    [SerializeField] private int shakeCounterTarget;
-    public Transform CameraTransform;
-    public float ShakeDuration = 2f;
+    [SerializeField] private float duration;
+    [SerializeField] private float amount;
+    [SerializeField] private float decrease;
 
-    public float ShakeAmount = 0.7f;
-    public float DecreaseFactor = 1f;
+    private Vector3 OriginalPosition; // the position of the camera before the shake starts
+    private float m_shakeDuration = 2f;
+    private float m_shakeAmount = 0.7f;
+    private float m_decreaseFactor = 1f;
+    private bool shaking = false;
 
-    Vector3 OriginalPosition;
-    private float OriginalShakeDuration;
-    private int ShakeCounter;
-    // Entire script needs editing, this is just an old template! -----------------------------
-
-    void Awake()
+    public void Shake(float _shakeDuration, float _shakeAmount, float _shakeDecreaseFactor)
     {
-        OriginalShakeDuration = ShakeDuration;
-        if (CameraTransform == null)
+        if (!shaking)
         {
-            CameraTransform = GetComponent<Transform>();
+            OriginalPosition = transform.position; // original position of the camera before the shake starts
+            m_shakeDuration = _shakeDuration; // factors for the shake
+            m_shakeAmount = _shakeAmount;
+            m_decreaseFactor = _shakeDecreaseFactor;
+
+            if (m_shakeDuration <= 0) { m_shakeDuration = 1; }
+            if (m_shakeAmount <= 0) { m_shakeAmount = 1; }
+            if (m_decreaseFactor <= 0) { m_decreaseFactor = 1; }
+
+            shaking = true; // shake the camera
         }
     }
-    // Entire script needs editing, this is just an old template! -----------------------------
 
-    void OnEnable()
-    {
-        ShakeDuration = 2f;
-        OriginalPosition = CameraTransform.position;
-    }
     // Entire script needs editing, this is just an old template! -----------------------------
-
     private void Update()
     {
-        if (ShakeDuration > 0)
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    Shake(duration, amount, decrease);
+        //}
+
+        if (shaking)
         {
-            if (ShakeCounter >= shakeCounterTarget)
+            if (m_shakeDuration > 0)
             {
-                CameraTransform.position = new Vector3(Player.transform.position.x, OriginalPosition.y, Player.transform.position.z) + Random.insideUnitSphere * ShakeAmount * ShakeDuration;
-                ShakeCounter = 0;
+                transform.position = OriginalPosition + (Random.insideUnitSphere * m_shakeAmount * m_shakeDuration);
+                m_shakeDuration -= Time.deltaTime * m_decreaseFactor;
             }
             else
             {
-                ShakeCounter++;
+                transform.position = OriginalPosition;
+                m_shakeDuration = 0;
+                shaking = false;
             }
-            ShakeDuration -= Time.deltaTime * DecreaseFactor;
-        }
-        else
-        {
-            ShakeDuration = 0;
-            enabled = false;
         }
     }
 }
-// Entire script needs editing, this is just an old template! -----------------------------
