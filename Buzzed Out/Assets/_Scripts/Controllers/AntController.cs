@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class AntController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private KeyCode forward;
+    [SerializeField] private KeyCode backward;
+    [SerializeField] private KeyCode left;
+    [SerializeField] private KeyCode right;
+
+    [SerializeField] private int Speed;
     void Start()
     {
         
@@ -13,12 +18,27 @@ public class AntController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        AntMovement();
     }
 
     void AntMovement()
     {
-        
+        if (Input.GetKey(forward))
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + (Speed * Time.deltaTime));
+        }
+        if (Input.GetKey(backward))
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + -(Speed * Time.deltaTime));
+        }
+        if (Input.GetKey(left))
+        {
+            transform.position = new Vector3(transform.position.x + -(Speed * Time.deltaTime), transform.position.y, transform.position.z);
+        }
+        if (Input.GetKey(right))
+        {
+            transform.position = new Vector3(transform.position.x + (Speed * Time.deltaTime), transform.position.y, transform.position.z);
+        }
     }
 
 
