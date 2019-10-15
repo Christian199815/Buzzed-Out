@@ -1,29 +1,62 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using XboxCtrlrInput;
+using System;
 
 public class Ant : MonoBehaviour
 {
+    [Header("Ant Settings")]
     [SerializeField] private int m_playerNumber;
+    [SerializeField] private Image m_healthBar;
+    [SerializeField] private Canvas m_canvas;
+    [SerializeField, Range(0.01f, 1f)] private float m_negationInputStrenghtThreshhold = 0.3f;
+
+    [Header("Ant Stats")]
+    [Tooltip("if the inputStrenght from the joystick is lower than the threshhold, it is ignored (set to 0), so the ant doesn't move\nDefault: 0.3")]
+    [SerializeField] private float m_maxHealth;
     [SerializeField] private int m_moveSpeed;
+    [SerializeField, Range(1, 10)] private float m_rotationSpeed;
 
     private Rigidbody rb;
+    private float currentHealth;
 
     private void Start()
     {
+        RotateCanvasTowardsCamera();
+        currentHealth = m_maxHealth;
         rb = GetComponent<Rigidbody>();
-        StartCoroutine(GetUserInput());
+        StartCoroutine(HandleMovementByUserInput());
         StartCoroutine(RestrictRigidBodyY(1));
     }
 
-    private IEnumerator GetUserInput()
+    private IEnumerator HandleMovementByUserInput()
     {
         while (true) // "game !paused" ?,   add a check if any button is being pressed.
         {
             Vector3 xboxInput = new Vector3(Input.GetAxis("Horizontalxbox" + m_playerNumber.ToString()), 0, Input.GetAxis("Verticalxbox" + m_playerNumber.ToString()));
-            transform.position += xboxInput * Time.deltaTime * m_moveSpeed;
-            transform.LookAt(transform.position + xboxInput);
+
+            Vector3 targetDir = (transform.position + xboxInput) - transform.position;
+            transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, targetDir, Time.deltaTime * m_rotationSpeed, 0.0f));
+
+            float x;
+            float z;
+            if (xboxInput.x < 0) { x = (float)xboxInput.x * -1f; } else { x = xboxInput.x; }
+            if (xboxInput.z < 0) { z = (float)xboxInput.z * -1f; } else { z = xboxInput.z; }
+            
+            int nonZerosInXboxInput = 0;
+            if (xboxInput.x != 0) { nonZerosInXboxInput += 1; }
+            if (xboxInput.z != 0) { nonZerosInXboxInput += 1; }
+                float inputStrenth = ((x + z) / nonZerosInXboxInput);
+
+            if (inputStrenth >= m_negationInputStrenghtThreshhold)
+            {
+                Vector3 forward;
+                forward = new Vector3(0, 0, inputStrenth);
+                transform.Translate(forward * m_moveSpeed * Time.deltaTime, Space.Self);
+                RotateCanvasTowardsCamera();
+            }
             yield return new WaitForEndOfFrame();
         }
     }
@@ -34,10 +67,43 @@ public class Ant : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezePositionY;
     }
 
-    public void Hit()
+    public void Hit(float _damage)
     {
         print(name + ": was hit");
-        Death();
+        bool alive = ChangeHealth(-_damage);
+
+        if (!alive)
+        {
+            Death();
+        }
+    }
+    /// <summary>
+    /// chages the currentHealth of the ant, returns a bool: true = alive, false = dead
+    /// </summary>
+    /// <param name="amountToAdd">health to be added / substracted</param>
+    /// <returns>alive = true, dead = false</returns>
+    private bool ChangeHealth(float amountToAdd)
+    {
+        currentHealth += amountToAdd;
+        UpdateHealthBar();
+        if(currentHealth <= 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private void RotateCanvasTowardsCamera()
+    {
+        m_canvas.transform.LookAt(Camera.main.transform.position + Camera.main.transform.rotation * Vector3.back, Camera.main.transform.rotation * Vector3.up);
+    }
+
+    private void UpdateHealthBar()
+    {
+        m_healthBar.fillAmount = (float)currentHealth / (float)m_maxHealth;
     }
 
     private void Death()
