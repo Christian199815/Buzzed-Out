@@ -9,32 +9,33 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI m_timerTextobject;
     [SerializeField] private GameObject m_antsHaveWonCanvas;
     [SerializeField] private GameObject m_SwatterHasWonCanvas;
+
     [Header("Game Settings")]
-    [SerializeField] private int m_minutesToPlay;
-    [SerializeField] private int m_secondsToPlay;
+    [SerializeField] private int m_minutesUntilSwatterWins;
+    [SerializeField] private int m_secondsUntilSwatterWins;
 
     private List<Ant> ants = new List<Ant>();
 
-    private int m_secondsLeft = 0;
+    private int m_timeLeftInSeconds = 0;
     private bool m_gamePaused = false;
 
     private void Start()
     {
-        if (m_secondsToPlay >= 60)
+        if (m_secondsUntilSwatterWins >= 60)
         {
             Debug.LogError("GameManager: secondsToPlay >= 60, the seconds were were converted to minutes");
 
-            int secondsToPlay = m_secondsToPlay;
+            int secondsToPlay = m_secondsUntilSwatterWins;
             while (secondsToPlay >= 60)
             {
                 secondsToPlay -= 60;
-                m_minutesToPlay += 1;
+                m_minutesUntilSwatterWins += 1;
             }
-            m_secondsLeft = (m_minutesToPlay * 60) + secondsToPlay;
+            m_timeLeftInSeconds = (m_minutesUntilSwatterWins * 60) + secondsToPlay;
         }
         else
         {
-            m_secondsLeft = (m_minutesToPlay * 60) + m_secondsToPlay;
+            m_timeLeftInSeconds = (m_minutesUntilSwatterWins * 60) + m_secondsUntilSwatterWins;
         }
         UnPauseGame();
         StartCoroutine(CountDownTimer());
@@ -44,7 +45,7 @@ public class GameManager : MonoBehaviour
     {
         float previousSecond = 0;
 
-        while(m_secondsLeft > 0)
+        while(m_timeLeftInSeconds > 0)
         {
             if (!m_gamePaused)
             {
@@ -60,10 +61,10 @@ public class GameManager : MonoBehaviour
 
     private void RetractSecondFromTimer()
     {
-        m_secondsLeft -= 1;
+        m_timeLeftInSeconds -= 1;
         UpdateTimerText();
 
-        if(m_secondsLeft <= 0)
+        if(m_timeLeftInSeconds <= 0)
         {
             TimerReachedZero();
         }
@@ -73,11 +74,11 @@ public class GameManager : MonoBehaviour
     {
         string textToInput = string.Empty; // make the string for the timer text that will be edited
 
-        textToInput += Mathf.RoundToInt(m_secondsLeft / 60); // add the minutes to the timer text
+        textToInput += Mathf.RoundToInt(m_timeLeftInSeconds / 60); // add the minutes to the timer text
 
         textToInput += ":"; // add the ":" to the timer text
 
-        int secondsLeft = m_secondsLeft; 
+        int secondsLeft = m_timeLeftInSeconds; 
         while(secondsLeft >= 60) // calculate the seconds left after minutes have been removed
         {
             secondsLeft -= 60;
@@ -93,43 +94,55 @@ public class GameManager : MonoBehaviour
 
         if(secondsLeft == 0)
         {
-            StartCoroutine(BounceTimerScale());
+            print("call");
+            StartCoroutine(BounceTimerScale(3, 1, 1.3f));
+        }
+
+        if(m_timeLeftInSeconds == 10)
+        {
+            m_timerTextobject.CrossFadeColor(new Color(220, 20, 60, 1), 1, false, false);
+            StartCoroutine(BounceTimerScale(10, 1, 1.5f));
         }
     }
-    private IEnumerator BounceTimerScale()
+
+    /// <param name="_amountOfTimes">how many times will the text bounce</param>
+    /// <param name="_timePerBounce">in how much time will the text grow bigger and smaller (bigger AND smalled in "_timePerBounce")</param>
+    /// <param name="_increaseFactor">how much bigger should the text become</param>
+    /// <returns></returns>
+    private IEnumerator BounceTimerScale(int _amountOfTimes, float _timePerBounce, float _increaseFactor = 1.3f)
     {
-        Vector3 originalScale = m_timerTextobject.gameObject.transform.localScale;
-        Vector3 newScale = Vector3.zero;
-        int phase = 0;
-        float timer = 0;
-
-        while (true)
+        for (int i = 0; i < _amountOfTimes; i++)
         {
-            switch (phase)
-            {
-                case 0:
-                    m_timerTextobject.gameObject.transform.localScale = Vector3.Lerp(originalScale, originalScale * 1.3f, timer);
-                    break;
-                case 1:
-                    m_timerTextobject.gameObject.transform.localScale = Vector3.Lerp(newScale, originalScale, timer);
-                    break;
-                case 2:
-                    m_timerTextobject.gameObject.transform.localScale = Vector3.Lerp(originalScale, originalScale * 1.3f, timer);
-                    break;
-                case 3:
-                    m_timerTextobject.gameObject.transform.localScale = Vector3.Lerp(newScale, originalScale, timer);
-                    break;
-            }
-            timer += Time.deltaTime;
+            Vector3 originalScale = m_timerTextobject.gameObject.transform.localScale;
+            Vector3 newScale = Vector3.zero;
+            int phase = 0;
+            float timer = 0;
+            bool completedBounce = false;
 
-            if(timer >= 0.5f)
+            while (!completedBounce)
             {
-                timer = 0;
-                phase += 1;
-                newScale = m_timerTextobject.gameObject.transform.localScale;
+                switch (phase)
+                {
+                    case 0:
+                        m_timerTextobject.gameObject.transform.localScale = Vector3.Lerp(originalScale, originalScale * _increaseFactor, timer * 2f); // multiply by 2, timer goes to 0.5 because it goes to "_timePerBounce" halved
+                        break;
+                    case 1:
+                        m_timerTextobject.gameObject.transform.localScale = Vector3.Lerp(newScale, originalScale, timer * 2); // multiply by 2, timer goes to 0.5 because it goes to "_timePerBounce" halved
+                        break;
+                    case 2:
+                        completedBounce = true;
+                        m_timerTextobject.gameObject.transform.localScale = originalScale;
+                        break;
+                }
+                timer += Time.deltaTime;
+                if (timer >= ((float)_timePerBounce / 2f))
+                {
+                    timer = 0;
+                    phase += 1;
+                    newScale = m_timerTextobject.gameObject.transform.localScale;
+                }
+                yield return new WaitForEndOfFrame();
             }
-
-            yield return new WaitForEndOfFrame();
         }
     }
 
