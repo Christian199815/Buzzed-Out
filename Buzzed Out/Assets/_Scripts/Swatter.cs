@@ -27,10 +27,12 @@ public class Swatter : MonoBehaviour
     [SerializeField] private int m_playerNumber;
 
     private SwatterState m_swatterState;
+    private AudioSource m_smackAudio;
 
     private void Start()
     {
-        if(m_SlamDurationBeforeHit <= 0)
+        m_smackAudio = GetComponent<AudioSource>();
+        if (m_SlamDurationBeforeHit <= 0)
         {
             Debug.LogError("Swatter: \"m_SlamdegreesPerSecond\" <= 0, please make this more then 0 in the inspector");
             return;
@@ -71,6 +73,7 @@ public class Swatter : MonoBehaviour
         m_swatterState = SwatterState.Slamming;
         yield return StartCoroutine(RotateDown());
         Camera.main.GetComponent<CameraShake>().Shake(0.6f, 1, 0.8f);
+        m_smackAudio.Play();
 
         m_swatterState = SwatterState.Floored;
         checkForCollision();

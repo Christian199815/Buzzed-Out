@@ -21,10 +21,12 @@ public class Ant : MonoBehaviour
 
     private Rigidbody rb;
     private GameManager m_game;
+    private AudioSource m_aahAudio;
     private float currentHealth;
 
     private void Start()
     {
+        m_aahAudio = GetComponent<AudioSource>();
         m_game = FindObjectOfType<GameManager>();
         if(m_game == null)
         {
@@ -81,6 +83,8 @@ public class Ant : MonoBehaviour
     public void Hit(float _damage)
     {
         print(name + ": was hit");
+
+        m_aahAudio.Play();
         bool alive = ChangeHealth(-_damage);
 
         if (!alive)
