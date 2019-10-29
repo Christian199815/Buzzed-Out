@@ -40,15 +40,15 @@ public class Ant : MonoBehaviour
             Vector3 targetDir = (transform.position + xboxInput) - transform.position;
             transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, targetDir, Time.deltaTime * m_rotationSpeed, 0.0f));
 
-            float x;
-            float z;
-            if (xboxInput.x < 0) { x = (float)xboxInput.x * -1f; } else { x = xboxInput.x; }
-            if (xboxInput.z < 0) { z = (float)xboxInput.z * -1f; } else { z = xboxInput.z; }
+            float positiveXboxInputX;
+            float positiveXboxInputZ;
+            if (xboxInput.x < 0) { positiveXboxInputX = (float)xboxInput.x * -1f; } else { positiveXboxInputX = xboxInput.x; }
+            if (xboxInput.z < 0) { positiveXboxInputZ = (float)xboxInput.z * -1f; } else { positiveXboxInputZ = xboxInput.z; }
             
             int nonZerosInXboxInput = 0;
             if (xboxInput.x != 0) { nonZerosInXboxInput += 1; }
             if (xboxInput.z != 0) { nonZerosInXboxInput += 1; }
-                float inputStrenth = ((x + z) / nonZerosInXboxInput);
+            float inputStrenth = ((positiveXboxInputX + positiveXboxInputZ) / nonZerosInXboxInput);
 
             if (inputStrenth >= m_negationInputStrenghtThreshhold)
             {
