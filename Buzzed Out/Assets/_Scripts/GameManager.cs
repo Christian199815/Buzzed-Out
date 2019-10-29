@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         {
             m_secondsLeft = (m_minutesToPlay * 60) + m_secondsToPlay;
         }
-
+        UnPauseGame();
         StartCoroutine(CountDownTimer());
     }
 
@@ -82,8 +82,55 @@ public class GameManager : MonoBehaviour
         {
             secondsLeft -= 60;
         }
+
+        if(secondsLeft < 10)
+        {
+            textToInput += "0";
+        }
+
         textToInput += secondsLeft; // add the seconds to the timer text
         m_timerTextobject.text = textToInput; // set the text
+
+        if(secondsLeft == 0)
+        {
+            StartCoroutine(BounceTimerScale());
+        }
+    }
+    private IEnumerator BounceTimerScale()
+    {
+        Vector3 originalScale = m_timerTextobject.gameObject.transform.localScale;
+        Vector3 newScale = Vector3.zero;
+        int phase = 0;
+        float timer = 0;
+
+        while (true)
+        {
+            switch (phase)
+            {
+                case 0:
+                    m_timerTextobject.gameObject.transform.localScale = Vector3.Lerp(originalScale, originalScale * 1.3f, timer);
+                    break;
+                case 1:
+                    m_timerTextobject.gameObject.transform.localScale = Vector3.Lerp(newScale, originalScale, timer);
+                    break;
+                case 2:
+                    m_timerTextobject.gameObject.transform.localScale = Vector3.Lerp(originalScale, originalScale * 1.3f, timer);
+                    break;
+                case 3:
+                    m_timerTextobject.gameObject.transform.localScale = Vector3.Lerp(newScale, originalScale, timer);
+                    break;
+            }
+            timer += Time.deltaTime;
+
+            if(timer >= 0.5f)
+            {
+                timer = 0;
+                phase += 1;
+                newScale = m_timerTextobject.gameObject.transform.localScale;
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     private void TimerReachedZero()
