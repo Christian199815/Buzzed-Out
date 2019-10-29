@@ -418,7 +418,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9ddd2b9f49c12e744a27aa54ddf2f233, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7352e5efb8a2ce14db8695a535586242, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -562,7 +562,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8483643ce06465c4a83bd73b8f1ea083, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a38b6064938e87c4fb3cfaa3e7d0b5df, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1227,7 +1227,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 249667513a217314f9ace00e6fee8332, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d9c03c765c79d2149a2bae4839c24ddc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1441,8 +1441,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1951430884}
-        m_MethodName: OnButtonClick
-        m_Mode: 1
+        m_MethodName: B_OnButtonClick
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1469,7 +1469,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 545e387f89404bd4b89a654d8816c235, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c05b56187a0d1824c8d76eb16e96f16e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
