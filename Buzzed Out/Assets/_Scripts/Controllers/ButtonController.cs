@@ -5,10 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class ButtonController : MonoBehaviour
 {
-    [SerializeField] private int SceneNumber;
-   public void OnButtonClick()
+   public void B_OnButtonClick(int SceneNumber)
     {
         SceneManager.LoadScene(SceneNumber);
     }
-   
 }

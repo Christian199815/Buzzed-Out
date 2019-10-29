@@ -20,10 +20,18 @@ public class Ant : MonoBehaviour
     [SerializeField, Range(1, 10)] private float m_rotationSpeed;
 
     private Rigidbody rb;
+    private GameManager m_game;
     private float currentHealth;
 
     private void Start()
     {
+        m_game = FindObjectOfType<GameManager>();
+        if(m_game == null)
+        {
+            Debug.LogError(gameObject.name + " could not find the GameManager");
+            return;
+        }
+        m_game.AddAntToList(this);
         RotateCanvasTowardsCamera();
         currentHealth = m_maxHealth;
         rb = GetComponent<Rigidbody>();
@@ -35,27 +43,30 @@ public class Ant : MonoBehaviour
     {
         while (true) // "game !paused" ?,   add a check if any button is being pressed.
         {
-            Vector3 xboxInput = new Vector3(Input.GetAxis("Horizontalxbox" + m_playerNumber.ToString()), 0, Input.GetAxis("Verticalxbox" + m_playerNumber.ToString()));
-
-            Vector3 targetDir = (transform.position + xboxInput) - transform.position;
-            transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, targetDir, Time.deltaTime * m_rotationSpeed, 0.0f));
-
-            float positiveXboxInputX;
-            float positiveXboxInputZ;
-            if (xboxInput.x < 0) { positiveXboxInputX = (float)xboxInput.x * -1f; } else { positiveXboxInputX = xboxInput.x; }
-            if (xboxInput.z < 0) { positiveXboxInputZ = (float)xboxInput.z * -1f; } else { positiveXboxInputZ = xboxInput.z; }
-            
-            int nonZerosInXboxInput = 0;
-            if (xboxInput.x != 0) { nonZerosInXboxInput += 1; }
-            if (xboxInput.z != 0) { nonZerosInXboxInput += 1; }
-            float inputStrenth = ((positiveXboxInputX + positiveXboxInputZ) / nonZerosInXboxInput);
-
-            if (inputStrenth >= m_negationInputStrenghtThreshhold)
+            if (!m_game.GetGamePaused())
             {
-                Vector3 forward;
-                forward = new Vector3(0, 0, inputStrenth);
-                transform.Translate(forward * m_moveSpeed * Time.deltaTime, Space.Self);
-                RotateCanvasTowardsCamera();
+                Vector3 xboxInput = new Vector3(Input.GetAxis("Horizontalxbox" + m_playerNumber.ToString()), 0, Input.GetAxis("Verticalxbox" + m_playerNumber.ToString()));
+
+                Vector3 targetDir = (transform.position + xboxInput) - transform.position;
+                transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, targetDir, Time.deltaTime * m_rotationSpeed, 0.0f));
+
+                float positiveXboxInputX;
+                float positiveXboxInputZ;
+                if (xboxInput.x < 0) { positiveXboxInputX = (float)xboxInput.x * -1f; } else { positiveXboxInputX = xboxInput.x; }
+                if (xboxInput.z < 0) { positiveXboxInputZ = (float)xboxInput.z * -1f; } else { positiveXboxInputZ = xboxInput.z; }
+
+                int nonZerosInXboxInput = 0;
+                if (xboxInput.x != 0) { nonZerosInXboxInput += 1; }
+                if (xboxInput.z != 0) { nonZerosInXboxInput += 1; }
+                float inputStrenth = ((positiveXboxInputX + positiveXboxInputZ) / nonZerosInXboxInput);
+
+                if (inputStrenth >= m_negationInputStrenghtThreshhold)
+                {
+                    Vector3 forward;
+                    forward = new Vector3(0, 0, inputStrenth);
+                    transform.Translate(forward * m_moveSpeed * Time.deltaTime, Space.Self);
+                    RotateCanvasTowardsCamera();
+                }
             }
             yield return new WaitForEndOfFrame();
         }
@@ -109,5 +120,17 @@ public class Ant : MonoBehaviour
     private void Death()
     {
         print(name + ": ded, dead, died");
+
+        m_game.AntDied(this);
+
+        // remove this when we get an ant animation for dying
+        DisableAnt();
+    }
+    /// <summary>
+    /// call this when you want the ant object to be disabled
+    /// </summary>
+    private void DisableAnt()
+    {
+        transform.root.gameObject.SetActive(false);
     }
 }

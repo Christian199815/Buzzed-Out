@@ -117,12 +117,13 @@ public class Swatter : MonoBehaviour
         while (rotatedDegrees < 30)
         {
             transform.rotation = Quaternion.Lerp(
-                Quaternion.Euler(0, transform.eulerAngles.y, transform.eulerAngles.z),
-                Quaternion.Euler(90, transform.eulerAngles.y, transform.eulerAngles.z),
+                Quaternion.Euler(0f, transform.eulerAngles.y, transform.eulerAngles.z),
+                Quaternion.Euler(90f, transform.eulerAngles.y, transform.eulerAngles.z),
             (float)rotatedDegrees / 30);
             rotatedDegrees += 3;
             yield return new WaitForSeconds(m_SlamDurationBeforeHit / (float)30);
         }
+        print((float)rotatedDegrees / 30f);
     }
 
     private IEnumerator RotateUp()
