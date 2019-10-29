@@ -38,7 +38,7 @@ public class Ant : MonoBehaviour
         currentHealth = m_maxHealth;
         rb = GetComponent<Rigidbody>();
         StartCoroutine(HandleMovementByUserInput());
-        StartCoroutine(RestrictRigidBodyY(1));
+        //StartCoroutine(RestrictRigidBodyY(1));
     }
 
     private IEnumerator HandleMovementByUserInput()
