@@ -2117,5 +2117,15 @@ PrefabInstance:
       propertyPath: m_moveSpeed
       value: 7.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2854740133145903190, guid: ba3fcb2a053166247ad1b0df177af7b6,
+        type: 3}
+      propertyPath: m_BonusMoveSpeedDurationForAntOnHit
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2854740133145903190, guid: ba3fcb2a053166247ad1b0df177af7b6,
+        type: 3}
+      propertyPath: m_BonusMoveSpeedForAntOnHit
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba3fcb2a053166247ad1b0df177af7b6, type: 3}

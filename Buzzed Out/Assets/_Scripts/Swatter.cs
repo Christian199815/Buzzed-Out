@@ -23,6 +23,10 @@ public class Swatter : MonoBehaviour
     [SerializeField] private float m_rechargeTime;
     [SerializeField] private float m_moveSpeed;
 
+    [Header("On Ant Hit")]
+    [SerializeField] private float m_BonusMoveSpeedDurationForAntOnHit;
+    [SerializeField] private int m_BonusMoveSpeedForAntOnHit;
+
     [Header("Player Settings")]
     [SerializeField] private int m_playerNumber;
 
@@ -111,6 +115,7 @@ public class Swatter : MonoBehaviour
         foreach (Ant a in hitAnts)
         {
             a.Hit(m_slamDamage);
+            a.GiveMoveSpeedBoost(m_BonusMoveSpeedForAntOnHit, m_BonusMoveSpeedDurationForAntOnHit);
         }
     }
 
