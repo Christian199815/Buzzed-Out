@@ -23,9 +23,11 @@ public class Ant : MonoBehaviour
     private GameManager m_game;
     private AudioSource m_aahAudio;
     private float currentHealth;
+    private int m_originalMoveSpeed;
 
     private void Start()
     {
+        m_originalMoveSpeed = m_moveSpeed;
         m_aahAudio = GetComponent<AudioSource>();
         m_game = FindObjectOfType<GameManager>();
         if(m_game == null)
@@ -38,7 +40,7 @@ public class Ant : MonoBehaviour
         currentHealth = m_maxHealth;
         rb = GetComponent<Rigidbody>();
         StartCoroutine(HandleMovementByUserInput());
-        StartCoroutine(RestrictRigidBodyY(1));
+        //StartCoroutine(RestrictRigidBodyY(1));
     }
 
     private IEnumerator HandleMovementByUserInput()
@@ -72,6 +74,11 @@ public class Ant : MonoBehaviour
             }
             yield return new WaitForEndOfFrame();
         }
+    }
+    private IEnumerator ResetMoveSpeed(float _duration)
+    {
+        yield return new WaitForSeconds(_duration);
+        m_moveSpeed = m_originalMoveSpeed;
     }
 
     private IEnumerator RestrictRigidBodyY(float _timeUntilREstriction)
@@ -130,11 +137,18 @@ public class Ant : MonoBehaviour
         // remove this when we get an ant animation for dying
         DisableAnt();
     }
+
     /// <summary>
     /// call this when you want the ant object to be disabled
     /// </summary>
     private void DisableAnt()
     {
         transform.root.gameObject.SetActive(false);
+    }
+
+    public void GiveMoveSpeedBoost(int _extraSpeed, float _duration)
+    {
+        m_moveSpeed += _extraSpeed;
+        StartCoroutine(ResetMoveSpeed(_duration));
     }
 }

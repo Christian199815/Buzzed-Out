@@ -132,11 +132,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ant p4
       objectReference: {fileID: 0}
-    - target: {fileID: 2821478212556527551, guid: 3aa1291e8c92e2945bde5aab64da4c77,
-        type: 3}
-      propertyPath: m_maxHealth
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 2583577382434648319, guid: 3aa1291e8c92e2945bde5aab64da4c77,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -197,13 +192,29 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 870447712}
-    - target: {fileID: 240470276, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
-      propertyPath: m_Enabled
-      value: 1
+    - target: {fileID: 240470275, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
+      propertyPath: m_Constraints
+      value: 80
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2736589904132406189, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
-    - {fileID: -460595333829371600, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
+    - target: {fileID: 240470275, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 240470275, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
+      propertyPath: m_Drag
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2536207845565906472, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3697954897355619098, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
 --- !u!1 &248558005
 GameObject:
@@ -341,6 +352,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ant p2
       objectReference: {fileID: 0}
+    - target: {fileID: 2821478212556527551, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_playerNumber
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2583577382434648319, guid: 3aa1291e8c92e2945bde5aab64da4c77,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -401,9 +417,27 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 870447712}
+    - target: {fileID: 240470275, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 240470275, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 240470276, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2536207845565906472, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3697954897355619098, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
@@ -519,7 +553,6 @@ GameObject:
   m_Component:
   - component: {fileID: 446527795}
   - component: {fileID: 446527794}
-  - component: {fileID: 446527797}
   - component: {fileID: 446527796}
   m_Layer: 0
   m_Name: GameManager
@@ -543,8 +576,8 @@ MonoBehaviour:
   m_timerTextobject: {fileID: 1441705957}
   m_antsHaveWonCanvas: {fileID: 248558005}
   m_SwatterHasWonCanvas: {fileID: 637244497}
-  m_minutesUntilSwatterWins: 0
-  m_secondsUntilSwatterWins: 12
+  m_minutesUntilSwatterWins: 5
+  m_secondsUntilSwatterWins: 0
 --- !u!4 &446527795
 Transform:
   m_ObjectHideFlags: 0
@@ -655,14 +688,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!81 &446527797
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 446527793}
-  m_Enabled: 1
 --- !u!1 &476362704
 GameObject:
   m_ObjectHideFlags: 0
@@ -1770,6 +1795,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ant p3
       objectReference: {fileID: 0}
+    - target: {fileID: 2821478212556527551, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_playerNumber
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2583577382434648319, guid: 3aa1291e8c92e2945bde5aab64da4c77,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1830,9 +1860,27 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 870447712}
+    - target: {fileID: 240470275, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 240470275, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 240470276, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2536207845565906472, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3697954897355619098, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3aa1291e8c92e2945bde5aab64da4c77, type: 3}
@@ -2068,6 +2116,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_moveSpeed
       value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2854740133145903190, guid: ba3fcb2a053166247ad1b0df177af7b6,
+        type: 3}
+      propertyPath: m_BonusMoveSpeedDurationForAntOnHit
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2854740133145903190, guid: ba3fcb2a053166247ad1b0df177af7b6,
+        type: 3}
+      propertyPath: m_BonusMoveSpeedForAntOnHit
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba3fcb2a053166247ad1b0df177af7b6, type: 3}
