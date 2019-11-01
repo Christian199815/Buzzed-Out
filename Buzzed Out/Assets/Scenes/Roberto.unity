@@ -693,8 +693,8 @@ MonoBehaviour:
   m_timerTextobject: {fileID: 1441705957}
   m_antsHaveWonCanvas: {fileID: 248558005}
   m_SwatterHasWonCanvas: {fileID: 637244497}
-  m_minutesUntilSwatterWins: 0
-  m_secondsUntilSwatterWins: 3
+  m_minutesUntilSwatterWins: 4
+  m_secondsUntilSwatterWins: 0
 --- !u!4 &446527795
 Transform:
   m_ObjectHideFlags: 0
