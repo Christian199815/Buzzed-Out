@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2868025064348171386}
   - component: {fileID: 3892837277404154657}
+  - component: {fileID: 6346755644280781174}
   m_Layer: 0
   m_Name: JellyHealth
   m_TagString: Untagged
@@ -42,11 +43,24 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756742810803097004}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.0731373, y: 1, z: 2.0874076}
   m_Center: {x: 0.010820959, y: 0, z: -0.06010111}
+--- !u!114 &6346755644280781174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756742810803097004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50a86db0cfd56e944a1b87173fe0beed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_beanType: 0
 --- !u!1 &4413168333413438086
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +72,6 @@ GameObject:
   - component: {fileID: 1768351867406383444}
   - component: {fileID: 3933895059605159041}
   - component: {fileID: 16237595253380107}
-  - component: {fileID: 4034839539738725029}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -126,20 +139,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &4034839539738725029
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4413168333413438086}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6285160695160982284
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,7 +150,6 @@ GameObject:
   - component: {fileID: 1157086312237713178}
   - component: {fileID: 5423132318646594899}
   - component: {fileID: 4100682963321635069}
-  - component: {fileID: 1758546247468867156}
   m_Layer: 0
   m_Name: Capsule (2)
   m_TagString: Untagged
@@ -219,20 +217,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &1758546247468867156
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6285160695160982284}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6784612804453186405
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,7 +228,6 @@ GameObject:
   - component: {fileID: 8163499920616192386}
   - component: {fileID: 2039413291442755562}
   - component: {fileID: 8599618684612874528}
-  - component: {fileID: 8290999280974109415}
   m_Layer: 0
   m_Name: Capsule (1)
   m_TagString: Untagged
@@ -312,17 +295,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &8290999280974109415
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6784612804453186405}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}

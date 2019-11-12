@@ -92,7 +92,6 @@ public class Swatter : MonoBehaviour
     private void checkForCollision()
     {
         //debug
-        print(m_hitter.transform.position);
         Collider[] colls = Physics.OverlapBox // transforms of the hitter gameobject
         #region Get colliders hit by the hitter gameobject
             (
@@ -111,12 +110,16 @@ public class Swatter : MonoBehaviour
             Ant ant = colls[i].gameObject.transform.root.gameObject.GetComponent<Ant>();
             if (ant != null)
             {
-                hitAnts.Add(ant);
+                if (!hitAnts.Contains(ant))
+                {
+                    hitAnts.Add(ant);
+                }
             }
         }
         // call the Hit() method on all the hit ants
         foreach (Ant a in hitAnts)
         {
+
             a.Hit(m_slamDamage);
             a.GiveMoveSpeedBoost(m_BonusMoveSpeedForAntOnHit, m_BonusMoveSpeedDurationForAntOnHit);
         }
@@ -134,7 +137,6 @@ public class Swatter : MonoBehaviour
             rotatedDegrees += 3;
             yield return new WaitForSeconds(m_SlamDurationBeforeHit / (float)30);
         }
-        print((float)rotatedDegrees / 30f);
     }
 
     private IEnumerator RotateUp()
@@ -160,10 +162,5 @@ public class Swatter : MonoBehaviour
         m_rb.isKinematic = false;
         yield return new WaitForSeconds(_rechargeTime);
         m_swatterState = SwatterState.Upright;
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        print(collision.gameObject.name);
     }
 }

@@ -9,6 +9,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI m_timerTextobject;
     [SerializeField] private GameObject m_antsHaveWonCanvas;
     [SerializeField] private GameObject m_SwatterHasWonCanvas;
+    [SerializeField] private ItemPool m_pool;
+    [SerializeField] private BoxCollider SpawnFieldForPickups;
+    [Header("PoolitemObjects")]
+    [SerializeField] private GameObject m_healthBean;
+    [SerializeField] private GameObject m_moveSpeedBean;
 
     [Header("Game Settings")]
     [SerializeField] private int m_minutesUntilSwatterWins;
@@ -39,6 +44,12 @@ public class GameManager : MonoBehaviour
         }
         UnPauseGame();
         StartCoroutine(CountDownTimer());
+
+        SpawnBean(m_healthBean.GetComponent<PoolItem>());
+        SpawnBean(m_healthBean.GetComponent<PoolItem>());
+        SpawnBean(m_moveSpeedBean.GetComponent<PoolItem>());
+        SpawnBean(m_moveSpeedBean.GetComponent<PoolItem>());
+        SpawnBean(m_moveSpeedBean.GetComponent<PoolItem>());
     }
 
     private IEnumerator CountDownTimer()
@@ -144,6 +155,22 @@ public class GameManager : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
         }
+    }
+
+    public void SpawnBean(PoolItem beanToSpawn)
+    {
+        Vector3 pos = CreatePositionForBean();
+
+        m_pool.ItemInstatiate(beanToSpawn, pos, Quaternion.identity);
+    }
+
+    private Vector3 CreatePositionForBean()
+    {
+        return new Vector3(
+            Random.Range(SpawnFieldForPickups.bounds.min.x, SpawnFieldForPickups.bounds.max.x),     // x
+            15,                                                                                     // y
+               Random.Range(SpawnFieldForPickups.bounds.min.z, SpawnFieldForPickups.bounds.max.z)   // z                                                                     // z
+        );
     }
 
     private void TimerReachedZero()
