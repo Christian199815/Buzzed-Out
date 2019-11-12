@@ -32,16 +32,18 @@ public class Swatter : MonoBehaviour
 
     private SwatterState m_swatterState;
     private AudioSource m_smackAudio;
+    private Rigidbody m_rb;
 
     private void Start()
     {
+        m_rb = GetComponent<Rigidbody>();
         m_smackAudio = GetComponent<AudioSource>();
         if (m_SlamDurationBeforeHit <= 0)
         {
             Debug.LogError("Swatter: \"m_SlamdegreesPerSecond\" <= 0, please make this more then 0 in the inspector");
             return;
         }
-        if(m_RetractFuration <= 0)
+        if (m_RetractFuration <= 0)
         {
             Debug.LogError("Swatter: \"m_RetractdegreesPerSecond\" <= 0, please make this more then 0 in the inspector");
             return;
@@ -75,6 +77,7 @@ public class Swatter : MonoBehaviour
     private IEnumerator Slam()
     {
         m_swatterState = SwatterState.Slamming;
+        m_rb.isKinematic = true;
         yield return StartCoroutine(RotateDown());
         Camera.main.GetComponent<CameraShake>().Shake(0.6f, 1, 0.8f);
         m_smackAudio.Play();
@@ -154,7 +157,13 @@ public class Swatter : MonoBehaviour
 
     private IEnumerator Recharge(float _rechargeTime)
     {
+        m_rb.isKinematic = false;
         yield return new WaitForSeconds(_rechargeTime);
         m_swatterState = SwatterState.Upright;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        print(collision.gameObject.name);
     }
 }

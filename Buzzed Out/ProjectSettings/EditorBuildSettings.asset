@@ -6,15 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Roberto.unity
-    guid: 0dc6fab895c886041a486f3a9782a5ee
-  - enabled: 1
     path: Assets/Scenes/Home_Placeholders_Done.unity
     guid: 2b07f7642e7a1cb4fa940136957c678e
   - enabled: 1
     path: Assets/Scenes/Roberto.unity
     guid: 0dc6fab895c886041a486f3a9782a5ee
-  - enabled: 1
-    path: Assets/Scenes/Main_Placeholders.unity
-    guid: fa282c3add8816241805206509491d90
   m_configObjects: {}
