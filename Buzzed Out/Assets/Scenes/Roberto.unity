@@ -407,6 +407,16 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 870447712}
+    - target: {fileID: 2821478212556527551, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821478212556527551, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_moveSpeed
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 8939468492818997581, guid: 3aa1291e8c92e2945bde5aab64da4c77,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1145,6 +1155,16 @@ PrefabInstance:
       propertyPath: m_playerNumber
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2821478212556527551, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821478212556527551, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_moveSpeed
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 8939468492818997581, guid: 3aa1291e8c92e2945bde5aab64da4c77,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1286,8 +1306,8 @@ MonoBehaviour:
   m_timerTextobject: {fileID: 1441705957}
   m_antsHaveWonCanvas: {fileID: 248558005}
   m_SwatterHasWonCanvas: {fileID: 637244497}
-  m_minutesUntilSwatterWins: 3
-  m_secondsUntilSwatterWins: 10
+  m_minutesUntilSwatterWins: 2
+  m_secondsUntilSwatterWins: 0
 --- !u!4 &446527795
 Transform:
   m_ObjectHideFlags: 0
@@ -4206,6 +4226,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_playerNumber
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821478212556527551, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821478212556527551, guid: 3aa1291e8c92e2945bde5aab64da4c77,
+        type: 3}
+      propertyPath: m_moveSpeed
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5290567528361518586, guid: 3aa1291e8c92e2945bde5aab64da4c77,
         type: 3}
