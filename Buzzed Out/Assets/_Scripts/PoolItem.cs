@@ -17,7 +17,7 @@ public abstract class PoolItem : MonoBehaviour
         transform.rotation = rotation;
     }
 
-    public virtual void ReturnToPool()
+    protected virtual void ReturnToPool()
     {
         mPool.AddItemToPool(this);
     }

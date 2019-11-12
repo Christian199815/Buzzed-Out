@@ -24,6 +24,7 @@ public class Ant : MonoBehaviour
     private AudioSource m_aahAudio;
     private float currentHealth;
     private int m_originalMoveSpeed;
+    private bool m_slowed = false;
 
     private void Start()
     {
@@ -150,5 +151,25 @@ public class Ant : MonoBehaviour
     {
         m_moveSpeed += _extraSpeed;
         StartCoroutine(ResetMoveSpeed(_duration));
+    }
+
+    public void SlowDown(int amount)
+    {
+        if (!m_slowed)
+        {
+            m_slowed = true;
+            m_moveSpeed -= amount;
+            print("slow: " + m_moveSpeed);
+        }
+    }
+
+    public void SpeedUp(int amount)
+    {
+        if (m_slowed)
+        {
+            m_slowed = false;
+            m_moveSpeed += amount;
+            print("fast: " + m_moveSpeed);
+        }
     }
 }
